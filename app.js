@@ -35,7 +35,8 @@ class Media {
     }
    
     getAverageRating() {
-        //  Se dokumentation: [.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce?v=example)
+        // Se dokumentation angående .reduce()
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce?v=example
         const ratingSum = this._ratings.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
         return ratingSum / this._ratings.length;
     }
@@ -45,3 +46,21 @@ class Media {
     }
     //#endregion
 }
+
+//#region "Subclasses"
+class Book extends Media {
+    constructor(author, title, pages, isCheckedOut, ratings) {
+        super(title, isCheckedOut, ratings)
+        this._author = author;
+        this._pages = pages;
+    }
+
+    get author() {
+        return this._author;
+    }
+
+    get pages() {
+        return this._pages;
+    }
+}
+//#endregion
