@@ -50,7 +50,7 @@ class Media {
 //#region "Subclasses"
 class Book extends Media {
     constructor(author, title, pages, isCheckedOut, ratings) {
-        super(title, isCheckedOut, ratings)
+        super(title, isCheckedOut, ratings);
         this._author = author;
         this._pages = pages;
     }
@@ -61,6 +61,22 @@ class Book extends Media {
 
     get pages() {
         return this._pages;
+    }
+}
+
+class Movie extends Media {
+    constructor(director, title, runTime, isCheckedOut, ratings) {
+        super(title, isCheckedOut, ratings);
+        this.director = director;
+        this.runTime = runTime;
+    }
+
+    get director() {
+        this.director;
+    }
+
+    get runtTime() {
+        this.runtTime;
     }
 }
 //#endregion
