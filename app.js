@@ -33,11 +33,15 @@ class Media {
         // Se dokumentation angående .reduce()
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce?v=example
         const ratingSum = this._ratings.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-        return ratingSum / this._ratings.length;
+        return Math.floor(ratingSum / this._ratings.length);
     }
         
     addRating(rating) {
-        return this._ratings.push(rating);
+        if (rating > 5 || rating == 0) {
+            return console.log('only ratings between 1-5 accepted')
+        } else {
+            return this._ratings.push(rating);
+        }
     }
     //#endregion
 }
@@ -50,6 +54,7 @@ class Book extends Media {
         this._pages = pages;
     }
 
+    //#region "getters"
     get author() {
         return this._author;
     }
@@ -57,21 +62,55 @@ class Book extends Media {
     get pages() {
         return this._pages;
     }
+    //#endregion
 }
 
 class Movie extends Media {
     constructor(director, title, runTime, isCheckedOut, ratings) {
         super(title, isCheckedOut, ratings);
-        this.director = director;
-        this.runTime = runTime;
+        this._director = director;
+        this._runTime = runTime;
     }
 
+    //#region "getters"
     get director() {
-        this.director;
+        this._director;
     }
 
     get runtTime() {
-        this.runtTime;
+        this._runtTime;
+    }
+    //#endregion
+}
+
+class CD extends Media {
+    constructor(artist, title, songs, isCheckedOut, ratings) {
+        super(title, isCheckedOut, ratings)
+        this._artist = artist;
+        this._songs = [];
+    }
+
+    //#region "getters"
+    get artist() {
+        return this._artist;
+    }
+
+    get songs() {
+        return this._songs;
+    }
+    //#endregion
+
+    addSongs(songs) {
+        return this._songs.push(...songs);
+    }
+
+    /** @function Fisher-Yates random sorting algorithm */
+    shuffle() {
+        for(let i = this._songs.length - 1; i > 0; i--) {
+            const random = Math.floor(Math.random() * (i + 1));
+
+            [this._songs[i], this._songs[random]] = [this._songs[random], this._songs[i]];
+        }
     }
 }
 //#endregion
@@ -80,25 +119,38 @@ class Movie extends Media {
 // Book instance
 const historyOfEverything = new Book('Bill Bryson', 'A Short History of Nearly Everything', 544);
 
-console.log(historyOfEverything.isCheckedOut); // false
 historyOfEverything.toggleCheckOutStatus();
-console.log(historyOfEverything.isCheckedOut); // true
+console.log(`Is checked: ${historyOfEverything.isCheckedOut}`); // true
 
 historyOfEverything.addRating(3);
 historyOfEverything.addRating(4);
 historyOfEverything.addRating(5);
 
-console.log(historyOfEverything.getAverageRating());
+console.log(`Average rating: ${historyOfEverything.getAverageRating()}`);
 
 // Movie instance
 const speed = new Movie('Jan de Bont', 'Speed', 116);
 
 speed.toggleCheckOutStatus();
-console.log(speed.isCheckedOut);
+console.log(`Is checked: ${speed.isCheckedOut}`);
 
 speed.addRating(1);
 speed.addRating(1);
 speed.addRating(5);
 
-console.log(speed.getAverageRating());
+console.log(`Average rating: ${speed.getAverageRating()}`);
+
+// CD instance
+const greatTaste = new CD('Lana del Ray', 'Brooklyn Baby');
+
+greatTaste.addSongs(['Brooklyn Baby', 'Ultraviolence', 'Sad girl', 'Summertime Sadness']);
+
+greatTaste.shuffle();
+console.log(greatTaste.songs);
+
+greatTaste.addRating(5);
+greatTaste.addRating(5);
+greatTaste.addRating(3);
+
+console.log(`Average rating: ${greatTaste.getAverageRating()}`);
 //#endregion
